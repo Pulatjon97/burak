@@ -9,8 +9,8 @@ routerAdmin
 .get('/login', restaurantController.getLogin)
 .post('/login', restaurantController.processLogin);
 
-routerAdmin.
-get("/signup", restaurantController.getSignup)
+routerAdmin
+.get("/signup", restaurantController.getSignup)
 .post("/signup", restaurantController.processSignup);
 /**Product */
 /**User */
