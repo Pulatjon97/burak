@@ -3,7 +3,7 @@
 - Naming standarts
     function, method, variable => Camel case
     class => PASCAL (first letter in cap)
-    folder => KEBAB
+    folder, file => KEBAB
     css => SNAKE
 - Error Handling
     
