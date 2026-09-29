@@ -5,7 +5,7 @@
     class => PASCAL (first letter in cap)
     folder => KEBAB
     css => SNAKE
-    - Error Handling
+- Error Handling
     
 */
 /**
