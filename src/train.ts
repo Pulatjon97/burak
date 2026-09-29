@@ -1,3 +1,17 @@
+// TASK - O
+function calculateSumOfNumbers(arr: unknown[]): number {
+  return arr.reduce((sum: number, item) => {
+    if (typeof item === "number") {
+      return sum + item;
+    }
+    return sum;
+  }, 0);
+}
+
+// Test
+console.log(calculateSumOfNumbers([10, "10", { son: 10 }, true, 35])); // 45
+
+
 /* Project Standarts:
 - Logging standarts
 - Naming standarts
@@ -32,14 +46,14 @@
 
 // Task - N
 
-function palindromCheck(str: string): boolean {
-  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const reversed = cleaned.split('').reverse().join('');
-  return cleaned === reversed;
-}
+// function palindromCheck(str: string): boolean {
+//   const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+//   const reversed = cleaned.split('').reverse().join('');
+//   return cleaned === reversed;
+// }
 
-console.log(palindromCheck("aka"));  // true
-console.log(palindromCheck("uka"));  // false
+// console.log(palindromCheck("aka"));  // true
+// console.log(palindromCheck("uka"));  // false
 
 
 
