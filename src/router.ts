@@ -1,6 +1,6 @@
 import express  from "express";
 const router = express.Router();
-import membercontroller from './controllers/member.controller';
+// OLD: import membercontroller from './controllers/member.controller';
 import memberController from "./controllers/member.controller";
 
 // router.get('/', memberController.goHome);
