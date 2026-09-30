@@ -34,19 +34,20 @@ public async processSignup(input: MemberInput): Promise<Member>  {
    // OLD: .exec();
    // NEW: "+memberPassword" adds the hidden password field for the Bcrypt check
    const member = await this.memberModel
-   .findOne({ memberNick: input.memberNick })
+   .findOne({ memberNick: input.memberNick }, { memberNick: 1, memberPassword: 1})
    .select("+memberPassword")
    .exec();
-
-   // OLD: console.log("member:", member);
-   // OLD: return member;
 
    // NEW: unknown nickname
    if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
    // NEW: compare the typed password with the stored hash
    const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
-   if (!isMatch) throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
+   console.log("isMatch:", isMatch);
+   if(!isMatch) {
+       throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
+   }  
+
 
    // NEW: fetch the member again (without the password) and return it
    const result = await this.memberModel.findById(member._id).exec();
