@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import app from "./app";
 mongoose.set("strictQuery", false);
 
+mongoose.set("strictQuery", false); // NEW: removes the Mongoose warning
+
 console.log("Port:",process.env.PORT);
 // OLD: console.log("MONGO_URL:",process.env.PORT);
 console.log("MONGO_URL is set:", Boolean(process.env.MONGO_URL)); // NEW: prints true/false, not the secret

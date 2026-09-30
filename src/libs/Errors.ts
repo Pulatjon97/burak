@@ -20,10 +20,12 @@ export enum Message {
 
 class Errors extends Error {
   public code: HttpCode;
-  public message: Message;
+  // OLD: public message: Message;
+  public declare message: Message; // NEW: avoids the "overwrite base property" error
 
   constructor(statusCode: HttpCode, statusMessage: Message) {
-    super();
+    // OLD: super();
+    super(statusMessage); // NEW
     this.code = statusCode;
     this.message = statusMessage;
   }

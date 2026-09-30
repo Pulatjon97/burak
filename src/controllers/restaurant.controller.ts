@@ -22,11 +22,7 @@ const sendError = (res: Response, err: unknown) => {
 restaurantController.goHome = (req: Request, res: Response) => {
     try {
         console.log('goHome');
-        // LOGIC
-        // SERVICE MODEL
-        // ...
         res.send('Home Page');
-        // send | json | redirect | end | render
     } catch (err) {
         console.log('Error, goHome', err);
         sendError(res, err); // NEW
@@ -61,32 +57,31 @@ restaurantController.processLogin = async (req: Request, res: Response) => {
       console.log("body:", req.body);
       const input: LoginInput = req.body;
 
-     const memberService = new MemberService();
-     const result = await memberService.processLogin(input);
+      const memberService = new MemberService();
+      const result = await memberService.processLogin(input);
 
       // OLD: res.send(result);
       res.json(result);
     } catch (err) {
         console.log("Error, processLogin", err);
-        // NEW: without this, Postman hangs on a failed login
-        sendError(res, err);
+        sendError(res, err); // NEW: without this, Postman hangs on a failed login
     }
 };
 
 restaurantController.processSignup = async (req: Request, res: Response) => {
     try {
       console.log('processSignup');
-const newMember: MemberInput = req.body;
-newMember.memberType = MemberType.RESTAURANT;
+      const newMember: MemberInput = req.body;
+      newMember.memberType = MemberType.RESTAURANT;
 
-    const memberService = new MemberService();
-    const result =  await memberService.processSignup(newMember);
+      const memberService = new MemberService();
+      const result = await memberService.processSignup(newMember);
       // OLD: res.send(result);
       res.json(result);
     } catch (err) {
         console.log("Error, processSignup", err);
-        // OLD: res.send(err);   (this returned status 200 even on errors)
-        sendError(res, err); // NEW: returns 400/500 with a JSON message
+        // OLD: res.send(err);  (this returned status 200 even on errors)
+        sendError(res, err); // NEW
     }
 };
 

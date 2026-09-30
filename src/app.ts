@@ -8,7 +8,7 @@ import { MORGAN_FORMAT } from "./libs/config";
 /** 1-ENTRANCE */
 const app = express();
 // OLD: console.log("__dirname:");
-console.log("__dirname:", __dirname); // NEW: now prints the actual path
+console.log("__dirname:", __dirname); // NEW: prints the real path
 app.use(express.static(path.join(__dirname, "public")))
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());

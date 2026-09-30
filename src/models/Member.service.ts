@@ -14,10 +14,9 @@ constructor() {
 public async processSignup(input: MemberInput): Promise<Member>  {
     const exist = await this.memberModel.findOne({memberType: MemberType.RESTAURANT})
     .exec();
-    // REMOVED: console.log("Existing RESTAURANT member:", exist);  (TEMP DEBUG)
     if(exist) throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
 
-    // NEW: hash the password before saving it to the database
+    // NEW: hash the password before saving it
     const salt = await bcrypt.genSalt();
     input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
 
@@ -26,7 +25,6 @@ public async processSignup(input: MemberInput): Promise<Member>  {
         result.memberPassword = "";
         return result as unknown as Member;
     } catch(err) {
-        // REMOVED: console.log("Signup real error:", err);  (TEMP DEBUG)
         throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
     }
  }
@@ -34,32 +32,30 @@ public async processSignup(input: MemberInput): Promise<Member>  {
    // OLD: const member = await this.memberModel
    // OLD: .findOne({memberNick: input.memberNick })
    // OLD: .exec();
-   // NEW: memberPassword has select:false in the schema, so it must be requested explicitly
+   // NEW: "+memberPassword" adds the hidden password field for the Bcrypt check
    const member = await this.memberModel
-   .findOne(
-     { memberNick: input.memberNick },
-     {_id: 0, memberNick: 1, memberPassword: 1 }
-   )
+   .findOne({ memberNick: input.memberNick })
+   .select("+memberPassword")
    .exec();
 
    // OLD: console.log("member:", member);
    // OLD: return member;
 
-   // REMOVED: console.log("All nicks in DB:", ...)  (TEMP DEBUG)
-
    // NEW: unknown nickname
    if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
    // NEW: compare the typed password with the stored hash
-   const isMatch = await bcrypt.compare(
-     input.memberPassword,
-     member.memberPassword
-   );
+   const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
    if (!isMatch) throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
 
    // NEW: fetch the member again (without the password) and return it
    const result = await this.memberModel.findById(member._id).exec();
-   console.log("member:", result); // NEW: same output as in the video, without the password
+   if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+
+   // NEW: terminal output like the video, without _id
+   const { _id, ...memberWithoutId } = result.toObject();
+   console.log("member:", memberWithoutId);
+
    return result as unknown as Member;
  }
 }
