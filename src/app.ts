@@ -13,6 +13,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(morgan(MORGAN_FORMAT));
 /** 2-SESSIONS */
+//test
 
 /** 3-VIEWS */
 app.set('views', path.join(__dirname, "views")); 
