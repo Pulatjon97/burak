@@ -1,15 +1,28 @@
-// TASK - O
-function calculateSumOfNumbers(arr: unknown[]): number {
-  return arr.reduce((sum: number, item) => {
-    if (typeof item === "number") {
-      return sum + item;
-    }
-    return sum;
-  }, 0);
+// TASK - P
+
+// P-TASK: object -> array of [key, value] pairs
+
+function objectToArray(obj: { [key: string]: any }): [string, any][] {
+  return Object.entries(obj);
 }
 
-// Test
-console.log(calculateSumOfNumbers([10, "10", { son: 10 }, true, 35])); // 45
+console.log(objectToArray({ a: 10, b: 20 }));
+// [ [ 'a', 10 ], [ 'b', 20 ] ]
+
+
+
+// // TASK - O
+// function calculateSumOfNumbers(arr: unknown[]): number {
+//   return arr.reduce((sum: number, item) => {
+//     if (typeof item === "number") {
+//       return sum + item;
+//     }
+//     return sum;
+//   }, 0);
+// }
+
+// // Test
+// console.log(calculateSumOfNumbers([10, "10", { son: 10 }, true, 35])); // 45
 
 
 /* Project Standarts:
