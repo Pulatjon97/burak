@@ -1,13 +1,28 @@
-// TASK - P
 
-// P-TASK: object -> array of [key, value] pairs
+/*
+  Traditinal Api
+  Rest Api
+  GraphQL Api
+  ...
+*/
 
-function objectToArray(obj: { [key: string]: any }): [string, any][] {
-  return Object.entries(obj);
-}
 
-console.log(objectToArray({ a: 10, b: 20 }));
-// [ [ 'a', 10 ], [ 'b', 20 ] ]
+/*
+  Traditional FD   =>   BSSR (Admin)   =>   EJS
+  Modern FD        =>   SPA (Users' application)   =>   REACT
+*/
+
+
+// // TASK - P
+
+// // P-TASK: object -> array of [key, value] pairs
+
+// function objectToArray(obj: { [key: string]: any }): [string, any][] {
+//   return Object.entries(obj);
+// }
+
+// console.log(objectToArray({ a: 10, b: 20 }));
+// // [ [ 'a', 10 ], [ 'b', 20 ] ]
 
 
 
