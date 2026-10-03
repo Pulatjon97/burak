@@ -33,7 +33,7 @@ restaurantController.getSignup = (req: Request, res: Response) => {
     try {
       // OLD: console.log('goHome');
       console.log('getSignup');
-      res.send('Signup Page');
+      res.render("signup");
     } catch (err) {
         console.log('Error, getSignup', err);
         sendError(res, err); // NEW
@@ -44,7 +44,7 @@ restaurantController.getLogin = (req: Request, res: Response) => {
     try {
       // OLD: console.log('goHome');
       console.log('getLogin');
-      res.send('Login Page');
+      res.render("login");
     } catch (err) {
         console.log('Error, getLogin', err);
         sendError(res, err); // NEW
