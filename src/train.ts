@@ -1,3 +1,12 @@
+//  TASK - Q
+
+function hasProperty(obj: object, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
+console.log(hasProperty({ name: "BMW", model: "ii7" }, "year")); // false
+
+
 
 /*
   Traditinal Api
