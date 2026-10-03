@@ -33,7 +33,7 @@ restaurantController.getSignup = (req: Request, res: Response) => {
     try {
       // OLD: console.log('goHome');
       console.log('getSignup');
-      res.render("signup");
+      res.render("signup");``
     } catch (err) {
         console.log('Error, getSignup', err);
         sendError(res, err); // NEW
