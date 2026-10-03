@@ -23,7 +23,7 @@ const sendError = (res: Response, err: unknown) => {
 restaurantController.goHome = (req: Request, res: Response) => {
     try {
         console.log('goHome');
-        res.send('Home Page');
+        res.render("home");
     } catch (err) {
         console.log('Error, goHome', err);
         sendError(res, err); // NEW
