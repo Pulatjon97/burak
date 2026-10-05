@@ -1,10 +1,27 @@
-//  TASK - Q
+// TASK - R
 
-function hasProperty(obj: object, key: string): boolean {
-  return Object.prototype.hasOwnProperty.call(obj, key);
+function calculate(str: string): number {
+  return str
+    .split("+")
+    .map((part) => Number(part.trim()))
+    .reduce((sum, num) => sum + num, 0);
 }
 
-console.log(hasProperty({ name: "BMW", model: "ii7" }, "year")); // false
+console.log(calculate("1+3")); // 4
+console.log(calculate("1+2")); // 3
+console.log(calculate("10 + 20 + 5")); // 35
+
+
+
+
+
+// //  TASK - Q
+
+// function hasProperty(obj: object, key: string): boolean {
+//   return Object.prototype.hasOwnProperty.call(obj, key);
+// }
+
+// console.log(hasProperty({ name: "BMW", model: "ii7" }, "year")); // false
 
 
 /**
