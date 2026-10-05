@@ -7,6 +7,10 @@ function hasProperty(obj: object, key: string): boolean {
 console.log(hasProperty({ name: "BMW", model: "ii7" }, "year")); // false
 
 
+/**
+ request join
+ self destroy
+ */
 
 /*
   Traditinal Api

@@ -23,10 +23,10 @@ const sendError = (res: Response, err: unknown) => {
 restaurantController.goHome = (req: Request, res: Response) => {
   try {
     console.log("goHome");
-    res.render("home");
+    res.render("home"); //send | render | redirect | json
   } catch (err) {
     console.log("Error, goHome", err);
-    sendError(res, err); // NEW
+    res.redirect("/admin")  
   }
 };
 restaurantController.getSignup = (req: Request, res: Response) => {
@@ -34,11 +34,11 @@ restaurantController.getSignup = (req: Request, res: Response) => {
     // OLD: console.log('goHome');
     console.log("getSignup");
     res.render("signup");
-    ``;
+    ;
   } catch (err) {
     console.log("Error, getSignup", err);
-    sendError(res, err); // NEW
-  }
+    res.redirect("/admin")  
+}
 };
 
 restaurantController.getLogin = (req: Request, res: Response) => {
@@ -48,7 +48,7 @@ restaurantController.getLogin = (req: Request, res: Response) => {
     res.render("login");
   } catch (err) {
     console.log("Error, getLogin", err);
-    sendError(res, err); // NEW
+    res.redirect("/admin")  
   }
 };
 
@@ -69,12 +69,16 @@ restaurantController.processSignup = async (
     });
   } catch (err) {
     console.log("Error, processSignup", err);
-    // OLD: res.send(err);  (this returned status 200 even on errors)
-    sendError(res, err); // NEW
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(`<script> alert("${message}"); window.location.replace('admin/signup) </script>`);
   }
 };
 
-restaurantController.processLogin = async (req: AdminRequest, res: Response) => {
+restaurantController.processLogin = async (
+  req: AdminRequest,
+  res: Response,
+) => {
   try {
     console.log("processLogin");
     console.log("body:", req.body);
@@ -92,18 +96,33 @@ restaurantController.processLogin = async (req: AdminRequest, res: Response) => 
     // OLD: res.json(result);  (second response, sent before the session saved, caused ERR_HTTP_HEADERS_SENT)
   } catch (err) {
     console.log("Error, processLogin", err);
-    sendError(res, err); // NEW: without this, Postman hangs on a failed login
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(`<script> alert("${message}"); window.location.replace('admin/login) </script>`);
   }
 };
 
-restaurantController.checkAuthSession = async (req: AdminRequest, res: Response) => {
+restaurantController.logout = async (req: AdminRequest, res: Response) => {
+  try {
+    console.log("logout");
+    req.session.destroy(function () {
+      res.redirect("/admin");
+    });
+  } catch (err) {
+    console.log("Error, logout", err);
+    res.redirect("/admin");
+  }
+};
+
+restaurantController.checkAuthSession = async (
+  req: AdminRequest,
+  res: Response,
+) => {
   try {
     console.log("checkAuthSession");
-  if(req.session?.member) 
-    res.send(`<script> alert("${req.session.member.memberNick}")</script>`);
-  else res.send(`<script> alert("${Message.NOT_AUTHENTICATED}")</script>`);  
-
-
+    if (req.session?.member)
+      res.send(`<script> alert("${req.session.member.memberNick}")</script>`);
+    else res.send(`<script> alert("${Message.NOT_AUTHENTICATED}")</script>`);
   } catch (err) {
     console.log("Error, checkAuthSession", err);
     sendError(res, err); // NEW: without this, Postman hangs on a failed login
