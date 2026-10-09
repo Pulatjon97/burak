@@ -1,15 +1,24 @@
-// TASK - R
 
-function calculate(str: string): number {
-  return str
-    .split("+")
-    .map((part) => Number(part.trim()))
-    .reduce((sum, num) => sum + num, 0);
-}
+/*Validation.  (63)Product - Schema MOdel lecture
+Frontend validation
+Backend valodation
+Database validation
+*/
 
-console.log(calculate("1+3")); // 4
-console.log(calculate("1+2")); // 3
-console.log(calculate("10 + 20 + 5")); // 35
+
+
+// // TASK - R
+
+// function calculate(str: string): number {
+//   return str
+//     .split("+")
+//     .map((part) => Number(part.trim()))
+//     .reduce((sum, num) => sum + num, 0);
+// }
+
+// console.log(calculate("1+3")); // 4
+// console.log(calculate("1+2")); // 3
+// console.log(calculate("10 + 20 + 5")); // 35
 
 
 
@@ -24,12 +33,12 @@ console.log(calculate("10 + 20 + 5")); // 35
 // console.log(hasProperty({ name: "BMW", model: "ii7" }, "year")); // false
 
 
-/**
+/** Cookies
  request join
  self destroy
  */
 
-/*
+/* Request:
   Traditinal Api
   Rest Api
   GraphQL Api
@@ -37,7 +46,7 @@ console.log(calculate("10 + 20 + 5")); // 35
 */
 
 
-/*
+/* Frontend Development
   Traditional FD   =>   BSSR (Admin)   =>   EJS
   Modern FD        =>   SPA (Users' application)   =>   REACT
 */
