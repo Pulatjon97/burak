@@ -1,3 +1,17 @@
+// TASK - S
+
+function missingNumber(arr: number[]): number {
+  const n = arr.length;
+  const expectedSum = (n * (n + 1)) / 2; // 0 dan n gacha bo'lgan sonlar yig'indisi
+  const actualSum = arr.reduce((sum, num) => sum + num, 0);
+  return expectedSum - actualSum;
+}
+
+console.log(missingNumber([3, 0, 1])); // 2
+
+
+
+
 
 /*Validation.  (63)Product - Schema MOdel lecture
 Frontend validation
