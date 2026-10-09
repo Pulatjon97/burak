@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
 import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
@@ -26,7 +26,7 @@ restaurantController.goHome = (req: Request, res: Response) => {
     res.render("home"); //send | render | redirect | json
   } catch (err) {
     console.log("Error, goHome", err);
-    res.redirect("/admin")  
+    res.redirect("/admin");
   }
 };
 restaurantController.getSignup = (req: Request, res: Response) => {
@@ -34,11 +34,10 @@ restaurantController.getSignup = (req: Request, res: Response) => {
     // OLD: console.log('goHome');
     console.log("getSignup");
     res.render("signup");
-    ;
   } catch (err) {
     console.log("Error, getSignup", err);
-    res.redirect("/admin")  
-}
+    res.redirect("/admin");
+  }
 };
 
 restaurantController.getLogin = (req: Request, res: Response) => {
@@ -48,7 +47,7 @@ restaurantController.getLogin = (req: Request, res: Response) => {
     res.render("login");
   } catch (err) {
     console.log("Error, getLogin", err);
-    res.redirect("/admin")  
+    res.redirect("/admin");
   }
 };
 
@@ -71,7 +70,9 @@ restaurantController.processSignup = async (
     console.log("Error, processSignup", err);
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
-    res.send(`<script> alert("${message}"); window.location.replace('admin/signup) </script>`);
+    res.send(
+      `<script> alert("${message}"); window.location.replace('admin/signup) </script>`,
+    );
   }
 };
 
@@ -98,7 +99,9 @@ restaurantController.processLogin = async (
     console.log("Error, processLogin", err);
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
-    res.send(`<script> alert("${message}"); window.location.replace('admin/login) </script>`);
+    res.send(
+      `<script> alert("${message}"); window.location.replace('admin/login) </script>`,
+    );
   }
 };
 
@@ -127,6 +130,20 @@ restaurantController.checkAuthSession = async (
     console.log("Error, checkAuthSession", err);
     sendError(res, err); // NEW: without this, Postman hangs on a failed login
   }
+};
+
+restaurantController.verifyRestaurant = (
+  req: AdminRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if(req.session?.member?.memberType === MemberType.RESTAURANT) {
+    req.member = req.session.member; 
+    next();
+  } else {
+ const message = Message.NOT_AUTHENTICATED;
+    res.send(`<script> alert("${message}"); window,location.replace('/admin/login'); </script>`);
+  } 
 };
 
 export default restaurantController;
