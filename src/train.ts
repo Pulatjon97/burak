@@ -1,13 +1,24 @@
-// TASK - S
+// TASK - T
 
-function missingNumber(arr: number[]): number {
-  const n = arr.length;
-  const expectedSum = (n * (n + 1)) / 2; // 0 dan n gacha bo'lgan sonlar yig'indisi
-  const actualSum = arr.reduce((sum, num) => sum + num, 0);
-  return expectedSum - actualSum;
+function mergeSortedArrays(a: number[], b: number[]): number[] {
+  return [...a, ...b].sort((x, y) => x - y);
 }
 
-console.log(missingNumber([3, 0, 1])); // 2
+console.log(mergeSortedArrays([0, 3, 4, 31], [4, 6, 30])); // [0, 3, 4, 4, 6, 30, 31]
+
+
+
+
+// // TASK - S
+
+// function missingNumber(arr: number[]): number {
+//   const n = arr.length;
+//   const expectedSum = (n * (n + 1)) / 2; // 0 dan n gacha bo'lgan sonlar yig'indisi
+//   const actualSum = arr.reduce((sum, num) => sum + num, 0);
+//   return expectedSum - actualSum;
+// }
+
+// console.log(missingNumber([3, 0, 1])); // 2
 
 
 
