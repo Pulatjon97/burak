@@ -57,14 +57,19 @@ restaurantController.processSignup = async (
 ) => {
   try {
     console.log("processSignup");
+    const file = req.file;
+    if (!file)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
+
     const newMember: MemberInput = req.body;
+    newMember.memberImage = file?.path;
     newMember.memberType = MemberType.RESTAURANT;
     const result = await memberService.processSignup(newMember);
     //TODO: SESSIONS AUTHENTICATION
 
     req.session.member = result;
     req.session.save(function () {
-      res.send(result);
+      res.redirect("/admin/product/all");
     });
   } catch (err) {
     console.log("Error, processSignup", err);
@@ -90,7 +95,7 @@ restaurantController.processLogin = async (
 
     req.session.member = result;
     req.session.save(function () {
-      res.send(result);
+      res.redirect("/admin/product/all");
     });
 
     // OLD: res.send(result);
@@ -135,15 +140,17 @@ restaurantController.checkAuthSession = async (
 restaurantController.verifyRestaurant = (
   req: AdminRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  if(req.session?.member?.memberType === MemberType.RESTAURANT) {
-    req.member = req.session.member; 
+  if (req.session?.member?.memberType === MemberType.RESTAURANT) {
+    req.member = req.session.member;
     next();
   } else {
- const message = Message.NOT_AUTHENTICATED;
-    res.send(`<script> alert("${message}"); window,location.replace('/admin/login'); </script>`);
-  } 
+    const message = Message.NOT_AUTHENTICATED;
+    res.send(
+      `<script> alert("${message}"); window,location.replace('/admin/login'); </script>`,
+    );
+  }
 };
 
 export default restaurantController;
