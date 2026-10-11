@@ -5,7 +5,7 @@ import {
   ProductStatus,
   ProductVolume,
 } from "../libs/enums/product.enum";
-import { deflate } from "node:zlib";
+// import { deflate } from "node:zlib";
 const productSchema = new Schema(
   {
     productStatus: {
@@ -27,29 +27,28 @@ const productSchema = new Schema(
 
     productPrice: {
       type: Number,
-      rquired: true,
+      required: true,
     },
 
     productLeftCount: {
       type: Number,
-      rquired: true,
+      required: true,
     },
 
-    productStize: {
+    productSize: {
       type: String,
       enum: ProductSize,
       default: ProductSize.NORMAL,
     },
 
     productVolume: {
-      type: String,
+      type: Number,
       enum: ProductVolume,
       default: ProductVolume.ONE,
     },
 
     productDesc: {
       type: String,
-      required: true,
     },
 
     productImages: {
