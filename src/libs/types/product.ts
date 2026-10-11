@@ -27,7 +27,20 @@ export interface ProductInput {
   productPrice: number;
   productLeftCount: number;
   productSize?: ProductSize;
-  // productVolume?: Number;
+  productVolume?: number;
+  productDesc?: string;
+  productImages?: string[];
+  productViews?: number;
+}
+
+export interface ProductUpdateInput {
+    _id: Object;
+  productStatus?: ProductStatus;
+  productCollection?: ProductCollection;
+  productName?: string;
+  productPrice?: number;
+  productLeftCount?: number;
+  productSize?: ProductSize;
   productVolume?: number;
   productDesc?: string;
   productImages?: string[];
