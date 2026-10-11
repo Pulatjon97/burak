@@ -18,6 +18,20 @@ class ProductService {
 
   /* BSSR */
 
+   public async getAllProducts(): Promise<Product[]> {
+    const result = await this.productModel
+      .find()
+      .lean()
+      .exec();
+
+    if (!result || result.length === 0) {
+      throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    }
+
+    return result as unknown as Product[];
+  }
+
+
   public async createNewProduct(input: ProductInput): Promise<Product> {
     try {
       const createdProduct = await this.productModel.create(input);
@@ -32,22 +46,12 @@ class ProductService {
     id: string,
     input: ProductUpdateInput,
   ): Promise<Product> {
-    // string => ObjectId
-    // OLD: id = shapeIntoMongooseObjectId(id);
-    // NEW: trim() removes stray spaces/newlines (e.g. the "%0A" copied with the
-    // id from Compass), which otherwise made new ObjectId(...) throw BSONTypeError.
-    // id = shapeIntoMongooseObjectId(id);
+  
     id = shapeIntoMongooseObjectId(String(id).trim());
     const result = await this.productModel
       .findOneAndUpdate({ _id: id }, input, { new: true })
       .exec();
-
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
-
-    // NEW: print the updated document in the terminal. The course output shows
-    // "result: { ... }" because it has this line; the old version had no log,
-    // so nothing was printed even though the update worked ([200]).
-
     return result.toObject() as Product;
   }
 }
