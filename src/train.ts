@@ -1,163 +1,194 @@
-// TASK - T
+// U-TASK
 
-function mergeSortedArrays(a: number[], b: number[]): number[] {
-  return [...a, ...b].sort((x, y) => x - y);
+function sumOdds(number: number): number {
+  let count = 0;
+
+  for (let i = 0; i < number; i++) {
+    if (i % 2 !== 0) count++;
+  }
+
+  return count;
 }
 
-console.log(mergeSortedArrays([0, 3, 4, 31], [4, 6, 30])); // [0, 3, 4, 4, 6, 30, 31]
+console.log(sumOdds(23));  // 11
+console.log(sumOdds(33)); // 16
 
 
 
 
-// // TASK - S
+/* Project Standarts:
+- Logging standarts
+- Naming standart:
+    function, method, variable => CAMEL
+    class => PASCAL
+    folder file => KEBAB
+    css => SNAKE
+- Error handling
 
-// function missingNumber(arr: number[]): number {
-//   const n = arr.length;
-//   const expectedSum = (n * (n + 1)) / 2; // 0 dan n gacha bo'lgan sonlar yig'indisi
-//   const actualSum = arr.reduce((sum, num) => sum + num, 0);
+*/
+
+/* Request Types
+Traditional API
+Rest API
+GraphQL API
+...
+*/
+
+/* Frontend Development
+Traditional Frontend => SSR => EJS
+Modern Frontend => SPA => React, Vue, Angular
+*/
+
+/* Coocies
+    reques join
+    self destroy
+
+*/
+
+/** Validation
+  frontend validation
+  backend validation
+ database validation
+ */
+
+
+
+// T-TASK
+
+//  function mergeSortedArrays(
+//   firstArray: readonly number[],
+//   secondArray: readonly number[]
+// ): number[] {
+//   const mergedArray: number[] = [];
+
+//   let firstIndex = 0;
+//   let secondIndex = 0;
+
+//   while (
+//     firstIndex < firstArray.length &&
+//     secondIndex < secondArray.length
+//   ) {
+//     if (firstArray[firstIndex] <= secondArray[secondIndex]) {
+//       mergedArray.push(firstArray[firstIndex]);
+//       firstIndex++;
+//     } else {
+//       mergedArray.push(secondArray[secondIndex]);
+//       secondIndex++;
+//     }
+//   }
+
+//   return [
+//     ...mergedArray,
+//     ...firstArray.slice(firstIndex),
+//     ...secondArray.slice(secondIndex),
+//   ];
+// }
+
+// const result = mergeSortedArrays([0, 3, 4, 31], [4, 6, 30]);
+
+// console.log(result);
+
+// S-TASK
+
+// function missingNumber(nums: number[]): number {
+//   const n: number = nums.length;
+//   const expectedSum: number = (n * (n + 1)) / 2;
+
+//   const actualSum: number = nums.reduce((sum: number, num: number) => sum + num, 0);
+
 //   return expectedSum - actualSum;
 // }
 
 // console.log(missingNumber([3, 0, 1])); // 2
 
-
-
-
-
-/*Validation.  (63)Product - Schema MOdel lecture
-Frontend validation
-Backend valodation
-Database validation
-*/
-
-
-
-// // TASK - R
+// R-TASK
 
 // function calculate(str: string): number {
-//   return str
-//     .split("+")
-//     .map((part) => Number(part.trim()))
-//     .reduce((sum, num) => sum + num, 0);
+//     return str
+//         .split('+')
+//         .reduce((sum, num) => sum + Number(num.trim()), 0);
 // }
 
-// console.log(calculate("1+3")); // 4
-// console.log(calculate("1+2")); // 3
-// console.log(calculate("10 + 20 + 5")); // 35
+// console.log(calculate("1+3"));      // 4
+// console.log(calculate("10+20"));    // 30
+// console.log(calculate("1+2+3+4"));  // 10
 
+// Q-TASK
 
-
-
-
-// //  TASK - Q
-
-// function hasProperty(obj: object, key: string): boolean {
-//   return Object.prototype.hasOwnProperty.call(obj, key);
+// interface Car {
+//     name: string;
+//     model: string;
 // }
 
-// console.log(hasProperty({ name: "BMW", model: "ii7" }, "year")); // false
+// const car: Car = { name: "BMW", model: "M3" };
 
+// console.log(hasProperty(car, "model"));
+// console.log(hasProperty(car, "year"));
 
-/** Cookies
- request join
- self destroy
- */
+// const propertyName = "model";
 
-/* Request:
-  Traditinal Api
-  Rest Api
-  GraphQL Api
-  ...
-*/
+// if (hasProperty(car, propertyName)) {
+//     console.log(car[propertyName]); //
+// }
 
+// function hasProperty(car: Car, arg1: string): boolean {
+//     return arg1 in car;
+// }
 
-/* Frontend Development
-  Traditional FD   =>   BSSR (Admin)   =>   EJS
-  Modern FD        =>   SPA (Users' application)   =>   REACT
-*/
+// function hasProperty(obj, str) {
+//     return str in obj;
+// }
 
+// console.log(hasProperty({name: "BMW", model: "M3"}, "model")); // true
+// console.log(hasProperty({name: "BMW", model: "M3"}, "year"));  // false
 
-// // TASK - P
+// // P-Task
 
-// // P-TASK: object -> array of [key, value] pairs
-
-// function objectToArray(obj: { [key: string]: any }): [string, any][] {
+// function obyektBorArrayga<T>(obj: Record<string, T>): [string, T][] {
 //   return Object.entries(obj);
 // }
+// const result = obyektBorArrayga({ c: 17, v: 43 });
+// console.log(result);
 
-// console.log(objectToArray({ a: 10, b: 20 }));
-// // [ [ 'a', 10 ], [ 'b', 20 ] ]
+//  O-TASK
 
-
-
-// // TASK - O
 // function calculateSumOfNumbers(arr: unknown[]): number {
-//   return arr.reduce((sum: number, item) => {
-//     if (typeof item === "number") {
+//   return arr.reduce<number>((sum, item) => {
+//     if (typeof item === "number" && !Number.isNaN(item)) {
 //       return sum + item;
 //     }
 //     return sum;
 //   }, 0);
 // }
 
-// // Test
-// console.log(calculateSumOfNumbers([10, "10", { son: 10 }, true, 35])); // 45
+// const result: number = calculateSumOfNumbers([10, "10", { son: 10 }, true, 35]);
+// console.log(result); // Natija: 45
 
+// N-task
 
-/* Project Standarts:
-- Logging standarts
-- Naming standarts
-    function, method, variable => Camel case
-    class => PASCAL (first letter in cap)
-    folder, file => KEBAB
-    css => SNAKE
-- Error Handling
-    
-*/
-/**
- * NAMING STANDARDS
- * -----------------
- * function, method, variable => camelCase
- *   e.g. let memberNick = "john_doe";
- *        function getMemberById(id: string) {}
- *
- * class / interface / enum => PascalCase
- *   e.g. class MemberService {}
- *        interface MemberDto {}
- *        enum MemberType {}
- *
- * folder => kebab-case
- *   e.g. src/member-service/, src/auth-middleware/
- *
- * css => snake_case
- *   e.g. .member_card {}, .profile_image {}
- */
+// function palindromCheck(input: string): boolean {
+//     const reverseInput = input.toLowerCase().split("").reverse().join("");
+//     if (input.toLowerCase() === reverseInput) {
+//         return true;
+//     }
+//     return false;
 
-
-
-
-// Task - N
-
-// function palindromCheck(str: string): boolean {
-//   const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
-//   const reversed = cleaned.split('').reverse().join('');
-//   return cleaned === reversed;
 // }
 
-// console.log(palindromCheck("aka"));  // true
-// console.log(palindromCheck("uka"));  // false
+// console.log(palindromCheck("non"))
 
+// M-Task
 
+// interface SquareResult {
+//   number: number;
+//   square: number;
+// }
 
-// //  Task - M
-// // npm run train
-
-// function getSquareNumbers(arr) {
-//   return arr.map(number => ({
-//     number: number,
-//     square: number * number
+// function getSquareNumbers(numbers: number[]): SquareResult[] {
+//   return numbers.map((num: number): SquareResult => ({
+//     number: num,
+//     square: num * num
 //   }));
 // }
 
-// // Test
-// console.log(getSquareNumbers([4, 8, 10]));
+// console.log(getSquareNumbers([1, 2, 3]));
