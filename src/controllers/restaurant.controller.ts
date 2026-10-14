@@ -33,7 +33,7 @@ restaurantController.getSignup = (req: Request, res: Response) => {
 restaurantController.getLogin = (req: Request, res: Response) => {
   try {
     console.log("getLogin");
-    res.send("Login Page");
+    res.render("login");
   } catch (err) {
     console.log("Error, getLogin:", err);
     res.redirect("/admin");
@@ -67,6 +67,8 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
 restaurantController.processLogin = async (req: AdminRequest, res: Response) => {
   try {
     console.log("processLogin");
+    console.log("req.body", req.body);
+    throw new Error("FORCED STOP!");
 
     const input: LoginInput = req.body;
     const result = await memberService.processLogin(input);
