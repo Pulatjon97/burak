@@ -1,17 +1,36 @@
-// U-TASK
+// TASK - V
 
-function sumOdds(number: number): number {
-  let count = 0;
+function countChars(str: string): { [key: string]: number } {
+  const result: { [key: string]: number } = {};
 
-  for (let i = 0; i < number; i++) {
-    if (i % 2 !== 0) count++;
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+
+    if (result[char]) result[char]++;
+    else result[char] = 1;
   }
 
-  return count;
+  return result;
 }
 
-console.log(sumOdds(23));  // 11
-console.log(sumOdds(33)); // 16
+console.log(countChars("hello")); // { h: 1, e: 1, l: 2, o: 1 }
+
+
+
+// U-TASK
+
+// function sumOdds(number: number): number {
+//   let count = 0;
+
+//   for (let i = 0; i < number; i++) {
+//     if (i % 2 !== 0) count++;
+//   }
+
+//   return count;
+// }
+
+// console.log(sumOdds(23));  // 11
+// console.log(sumOdds(33)); // 16
 
 
 
