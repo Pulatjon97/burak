@@ -1,3 +1,5 @@
+/* NEW: makes the page full height so the gradient covers the whole screen,
+   not only the area behind the card. */
 html,
 body {
   margin: 0;

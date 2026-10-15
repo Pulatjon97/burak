@@ -1,6 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-import { ProductCollection, ProductSize, ProductStatus, ProductVolume } from "../libs/enums/product.enum";
-
+import {
+  ProductCollection,
+  ProductSize,
+  ProductStatus,
+  ProductVolume,
+} from "../libs/enums/product.enum";
+// import { deflate } from "node:zlib";
 const productSchema = new Schema(
   {
     productStatus: {
@@ -22,11 +27,13 @@ const productSchema = new Schema(
 
     productPrice: {
       type: Number,
+      // rquired: true,
       required: true,
     },
 
     productLeftCount: {
       type: Number,
+      // rquired: true,
       required: true,
     },
 
@@ -47,7 +54,7 @@ const productSchema = new Schema(
     },
 
     productImages: {
-      type: [String],
+      type: Array,
       default: [],
     },
 
@@ -56,12 +63,12 @@ const productSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true }, // updateAt, createAt
-);
+  { timestamps: true },
+); // updatedAt, createdAt
 
 productSchema.index(
-    { productName: 1, productSize: 1, productVolume: 1 },
-    { unique: true }
+  { productName: 1, productSize: 1, productVolume: 1 },
+  { unique: true },
 );
 
 export default mongoose.model("Product", productSchema);

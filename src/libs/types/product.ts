@@ -1,5 +1,9 @@
 import { ObjectId } from "mongoose";
-import { ProductCollection, ProductSize, ProductStatus } from "../enums/product.enum";
+import {
+  ProductCollection,
+  ProductSize,
+  ProductStatus,
+} from "../enums/product.enum";
 
 export interface Product {
   _id: ObjectId;
@@ -8,11 +12,11 @@ export interface Product {
   productName: string;
   productPrice: number;
   productLeftCount: number;
-  productSize: ProductSize;
-  productVolume: number;
+  productSize?: ProductSize;
+  productVolume?: number;
   productDesc?: string;
-  productImages: string[];
-  productViews: number;
+  productImages?: string[];
+  productViews?: number;
 }
 
 export interface ProductInput {
@@ -28,6 +32,8 @@ export interface ProductInput {
   productViews?: number;
 }
 
+// NEW: Product.service.ts imports this type for updateChosenProduct.
+// Without it TypeScript reports: has no exported member 'ProductUpdateInput'.
 export interface ProductUpdateInput {
   _id: ObjectId;
   productStatus?: ProductStatus;
