@@ -1,19 +1,37 @@
-// TASK - V
+// TASK - W
 
-function countChars(str: string): { [key: string]: number } {
-  const result: { [key: string]: number } = {};
+function chunkArray(arr, size) {
+  const result = [];
 
-  for (let i = 0; i < str.length; i++) {
-    const char = str[i];
-
-    if (result[char]) result[char]++;
-    else result[char] = 1;
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
   }
 
   return result;
 }
 
-console.log(countChars("hello")); // { h: 1, e: 1, l: 2, o: 1 }
+console.log(chunkArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3));
+// [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]
+
+
+
+
+// TASK - V
+
+// function countChars(str: string): { [key: string]: number } {
+//   const result: { [key: string]: number } = {};
+
+//   for (let i = 0; i < str.length; i++) {
+//     const char = str[i];
+
+//     if (result[char]) result[char]++;
+//     else result[char] = 1;
+//   }
+
+//   return result;
+// }
+
+// console.log(countChars("hello")); // { h: 1, e: 1, l: 2, o: 1 }
 
 
 
