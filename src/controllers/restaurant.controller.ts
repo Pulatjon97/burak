@@ -73,7 +73,7 @@ restaurantController.processLogin = async (req: AdminRequest, res: Response) => 
     // login code below could run, so every login ended in the catch block with
     // the alert "FORCED STOP!". It was a debugging line, so it is commented out.
     // throw new Error("FORCED STOP!");
-
+ 
     const input: LoginInput = req.body;
     const result = await memberService.processLogin(input);
 
