@@ -16,10 +16,10 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-mongodb-session": "^3.1.1",
-    "cookie-parser": "^1.4.6",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
-    "ejs": "^3.1.6",
+    "ejs": "^7.0.2",
     "express": "^4.17.3",
     "express-session": "^1.17.3",
     "fs-extra": "^11.1.1",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/connect-mongodb-session": "^2.4.7",
-    "@types/cookie-parser": "^1.4.6",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.3",
     "@types/express-session": "^1.17.10",
@@ -44,7 +44,7 @@
     "@types/multer": "^1.4.11",
     "@types/socket.io": "^3.0.2",
     "@types/uuid": "^9.0.7",
-    "nodemon": "^3.0.2",
+    "nodemon": "^1.0.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
