@@ -33,6 +33,10 @@ restaurantController.getSignup = (req: Request, res: Response) => {
 restaurantController.getLogin = (req: Request, res: Response) => {
   try {
     console.log("getLogin");
+    const member = (req.session as AdminRequest["session"]).member;
+    if (member?.memberType === MemberType.RESTAURANT) {
+      return res.redirect("/admin/product/all");
+    }
     res.render("login");
   } catch (err) {
     console.log("Error, getLogin:", err);
@@ -60,31 +64,40 @@ restaurantController.processSignup = async (req: AdminRequest, res: Response) =>
     });
   } catch (err) {
     console.log("Error, processSignup:", err);
-    const message = err instanceof Error ? err.message : Message.SOMETHING_WENT_WRONG;
-    res.send(`<script>alert('${message}'); window.location.replace('/admin/signup') </script>`);
+    const status = err instanceof Errors ? err.code : HttpCode.INTERNAL_SERVER_ERROR;
+    const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    return res.status(status).render("signup", { error: message });
   }
 };
 
 restaurantController.processLogin = async (req: AdminRequest, res: Response) => {
   try {
     console.log("processLogin");
-    console.log("req.body", req.body);
-    // OLD (this was the problem): this line always threw an error before the
-    // login code below could run, so every login ended in the catch block with
-    // the alert "FORCED STOP!". It was a debugging line, so it is commented out.
-    // throw new Error("FORCED STOP!");
- 
-    const input: LoginInput = req.body;
+    const input: LoginInput = {
+      memberNick: String(req.body.memberNick ?? "").trim(),
+      memberPassword: String(req.body.memberPassword ?? ""),
+    };
+    if (!input.memberNick || !input.memberPassword) {
+      return res.status(HttpCode.BAD_REQUEST).render("login", {
+        error: "Enter both your restaurant ID and password.",
+      });
+    }
+
     const result = await memberService.processLogin(input);
 
-    req.session.member = result;
-    req.session.save(function () {
-      res.redirect("/admin/product/all");
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err) => (err ? reject(err) : resolve()));
     });
+    req.session.member = result;
+    await new Promise<void>((resolve, reject) => {
+      req.session.save((err) => (err ? reject(err) : resolve()));
+    });
+    return res.redirect("/admin/product/all");
   } catch (err) {
     console.log("Error, processLogin:", err);
-    const message = err instanceof Error ? err.message : Message.SOMETHING_WENT_WRONG;
-    res.send(`<script>alert('${message}'); window.location.replace('/admin/login') </script>`);
+    const status = err instanceof Errors ? err.code : HttpCode.INTERNAL_SERVER_ERROR;
+    const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    return res.status(status).render("login", { error: message });
   }
 };
 
@@ -142,8 +155,7 @@ restaurantController.verifyRestaurant = (req: AdminRequest, res: Response, next:
     req.member = req.session.member;
     next();
   } else {
-    const message = Message.NOT_AUTHENTICATED;
-    res.send(`<script>alert('${message}'); window.location.replace('/admin/login');</script>`);
+    res.redirect("/admin/login");
   }
 };
 

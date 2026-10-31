@@ -3,6 +3,7 @@ export enum HttpCode {
   CREATED = 201,
   NOT_MODIFIED = 304,
   BAD_REQUEST = 400,
+  CONFLICT = 409,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
@@ -15,7 +16,8 @@ export enum Message {
   CREATE_FAILED = "Create is failed!",
   UPDATE_FAILED = "Update is failed!", 
 
-  USED_NICK_PRHONE = "You inserting already used nick or phone!",
+  USED_NICK_PHONE = "That nickname or phone number is already in use.",
+    TOKEN_CREATION_FAILED = "Token creation error!",
   NO_MEMBER_NICK = "No member with that member nick!",
   BLOCKED_USER = "You have been blocked, contact the restaurant!",
   WRONG_PASSWORD = "Wrong password , please try again!",

@@ -14,25 +14,31 @@
         </p>
       </div>
       <div class="login-input-frame">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <p class="login-error" role="alert"><%= error %></p>
+        <% } %>
         <div class="login-input-container">
-          <label>Restaurant *</label>
+          <label for="memberNick">Restaurant *</label>
           <input
             type="text"
+            id="memberNick"
             name="memberNick"
             class="member-nick"
             placeholder="Username"
-            value=""
+            value="<%= typeof memberNick !== 'undefined' ? memberNick : '' %>"
+            autocomplete="username"
             required
           /> 
         </div>
         <div class="login-input-container">
-          <label>Password *</label>
+          <label for="memberPassword">Password *</label>
           <input
             type="password"
+            id="memberPassword"
             name="memberPassword"
             class="member-password"
             placeholder="Password"
-            value=""
+            autocomplete="current-password"
             required
           />
         </div>

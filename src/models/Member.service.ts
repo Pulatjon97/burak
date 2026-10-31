@@ -20,16 +20,24 @@ class MemberService {
   /* SPA */
 
   public async signup(input: MemberInput): Promise<Member> {
-    const salt = await bcrypt.genSalt();
-    input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
-
     try {
-      const result = await this.memberModel.create(input);
+      const passwordHash = await bcrypt.hash(input.memberPassword, await bcrypt.genSalt());
+      const result = await this.memberModel.create({
+        memberType: MemberType.USER,
+        memberNick: input.memberNick.trim(),
+        memberPhone: input.memberPhone.trim(),
+        memberPassword: passwordHash,
+        memberAddress: input.memberAddress?.trim(),
+        memberDesc: input.memberDesc?.trim(),
+        memberImage: input.memberImage,
+      });
       result.memberPassword = "";
       return result.toJSON();
     } catch (err) {
-      console.log("Error, model:signup", err);
-      throw new Errors(HttpCode.BAD_REQUEST, Message.USED_NICK_PRHONE);
+      if ((err as { code?: number })?.code === 11000) {
+        throw new Errors(HttpCode.CONFLICT, Message.USED_NICK_PHONE);
+      }
+      throw err;
     }
   }
 
@@ -49,7 +57,6 @@ class MemberService {
       throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER)
      }
 
-     console.log("member:" , member);
     const isMatch = await bcrypt.compare(
       input.memberPassword,
       member.memberPassword,
@@ -85,12 +92,19 @@ class MemberService {
   public async processLogin(input: LoginInput): Promise<Member> {
     const member = await this.memberModel
       .findOne(
-        { memberNick: input.memberNick },
-        { memberNick: 1, memberPassword: 1 },
+        {
+          memberNick: input.memberNick.trim(),
+          memberType: MemberType.RESTAURANT,
+          memberStatus: { $ne: MemberStatus.DELETE },
+        },
+        { memberNick: 1, memberPassword: 1, memberStatus: 1 },
       )
       .exec();
 
     if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+    if (member.memberStatus === MemberStatus.BLOCK) {
+      throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER);
+    }
 
     const isMatch = await bcrypt.compare(
       input.memberPassword,

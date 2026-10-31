@@ -20,6 +20,10 @@
           </p>
         </div>
 
+        <% if (typeof error !== 'undefined' && error) { %>
+          <p class="signup-error" role="alert"><%= error %></p>
+        <% } %>
+
         <div class="sign-input-frame" style="justify-content: space-between">
           <div class="sign-up-frame">
             <label>Restaurant *</label>
