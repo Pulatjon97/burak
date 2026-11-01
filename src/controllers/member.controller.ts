@@ -96,4 +96,25 @@ memberController.login = async (req: Request, res: Response) => {
   }
 };
 
+memberController.verifyAuth = async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies?.accessToken;
+    if (!token) {
+      throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+    }
+
+    const member = await authService.checkAuth(token);
+    console.log("member:", member);
+    return res.status(HttpCode.OK).json({ member });
+  } catch (err) {
+    if (err instanceof Errors) {
+      return res.status(err.code).json({ error: err.message });
+    }
+    console.error("Auth verification failed:", err instanceof Error ? err.name : "Unknown error");
+    return res
+      .status(HttpCode.UNAUTHORIZED)
+      .json({ error: Message.NOT_AUTHENTICATED });
+  }
+};
+
 export default memberController;
