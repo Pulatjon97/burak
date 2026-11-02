@@ -100,14 +100,32 @@ memberController.login = async (req: Request, res: Response) => {
 memberController.logout = (req: ExtendedRequest, res: Response) => {
   try {
     console.log("logout");
-    res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
-    res.status(HttpCode.OK).json({ logout: true });
+    res.clearCookie("accessToken", { path: "/", sameSite: "lax" });
+    return res.status(HttpCode.OK).json({ logout: true });
   } catch (err) {
     console.log("Error, logout:", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
+    if (err instanceof Errors) return res.status(err.code).json(err);
+    return res.status(Errors.standard.code).json(Errors.standard);
   }
 };
+
+memberController.getMemberDetail = async (
+  req: ExtendedRequest,
+  res: Response,
+) => {
+  try {
+    console.log("getMemberDetail");
+    const result = await memberService.getMemberDetail(req.member);
+    return res.status(HttpCode.OK).json({ member: result });
+  } catch (err) {
+    console.log("Error, getMemberDetail:", err);
+    if (err instanceof Errors) return res.status(err.code).json(err);
+    return res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+
+
 
 memberController.verifyAuth = async (
   req: ExtendedRequest,

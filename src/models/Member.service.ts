@@ -21,7 +21,10 @@ class MemberService {
 
   public async signup(input: MemberInput): Promise<Member> {
     try {
-      const passwordHash = await bcrypt.hash(input.memberPassword, await bcrypt.genSalt());
+      const passwordHash = await bcrypt.hash(
+        input.memberPassword,
+        await bcrypt.genSalt(),
+      );
       const result = await this.memberModel.create({
         memberType: MemberType.USER,
         memberNick: input.memberNick.trim(),
@@ -49,13 +52,13 @@ class MemberService {
           memberNick: input.memberNick,
           memberStatus: { $ne: MemberStatus.DELETE },
         },
-        { memberNick: 1, memberPassword: 1, memberStatus: 1 }
+        { memberNick: 1, memberPassword: 1, memberStatus: 1 },
       )
       .exec();
     if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
-     else if(member.memberStatus === MemberStatus.BLOCK) {
-      throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER)
-     }
+    else if (member.memberStatus === MemberStatus.BLOCK) {
+      throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER);
+    }
 
     const isMatch = await bcrypt.compare(
       input.memberPassword,
@@ -66,6 +69,16 @@ class MemberService {
     }
 
     return await this.memberModel.findById(member._id).lean().exec();
+  }
+
+  public async getMemberDetail(member: Member): Promise<Member> {
+    const memberId = shapeIntoMongooseObjectId(member._id);
+    const result = await this.memberModel
+      .findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE })
+      .exec();
+
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    return result;
   }
 
   /* SSR */
