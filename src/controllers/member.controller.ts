@@ -124,9 +124,6 @@ memberController.getMemberDetail = async (
   }
 };
 
-
-
-
 memberController.verifyAuth = async (
   req: ExtendedRequest,
   res: Response,
@@ -164,6 +161,8 @@ memberController.retrieveAuth = async (
     next();
   }
 };
-{
-}
+
+/** PRODUCT */
+
+/** ORDER */
 export default memberController;
