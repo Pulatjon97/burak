@@ -1,7 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
-import { LoginInput, Member, MemberInput } from "../libs/types/member";
+import {
+  ExtendedRequest,
+  LoginInput,
+  Member,
+  MemberInput,
+} from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/utils/Errors";
 import AuthService from "../models/Auth.service";
 import { AUTH_TIMER } from "../libs/utils/config";
@@ -51,9 +56,7 @@ memberController.signup = async (req: Request, res: Response) => {
       sameSite: "lax",
     });
 
-    return res
-      .status(HttpCode.CREATED)
-      .json({ member, accessToken: token });
+    return res.status(HttpCode.CREATED).json({ member, accessToken: token });
   } catch (err) {
     if (err instanceof Errors)
       return res.status(err.code).json({ error: err.message });
@@ -84,9 +87,7 @@ memberController.login = async (req: Request, res: Response) => {
       sameSite: "lax",
     });
 
-    return res
-      .status(HttpCode.OK)
-      .json({ member, accessToken: token });
+    return res.status(HttpCode.OK).json({ member, accessToken: token });
   } catch (err) {
     console.log("Error, login:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
@@ -96,25 +97,55 @@ memberController.login = async (req: Request, res: Response) => {
   }
 };
 
-memberController.verifyAuth = async (req: Request, res: Response) => {
+memberController.logout = (req: ExtendedRequest, res: Response) => {
   try {
-    const token = req.cookies?.accessToken;
-    if (!token) {
-      throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
-    }
-
-    const member = await authService.checkAuth(token);
-    console.log("member:", member);
-    return res.status(HttpCode.OK).json({ member });
+    console.log("logout");
+    res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
+    res.status(HttpCode.OK).json({ logout: true });
   } catch (err) {
-    if (err instanceof Errors) {
-      return res.status(err.code).json({ error: err.message });
-    }
-    console.error("Auth verification failed:", err instanceof Error ? err.name : "Unknown error");
-    return res
-      .status(HttpCode.UNAUTHORIZED)
-      .json({ error: Message.NOT_AUTHENTICATED });
+    console.log("Error, logout:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
 
+memberController.verifyAuth = async (
+  req: ExtendedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const token = req.cookies["accessToken"];
+    if (token) req.member = await authService.checkAuth(token);
+    if (!req.member) {
+      throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+    }
+
+    next();
+  } catch (err) {
+    console.log("Error, verifyAuth:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+memberController.retrieveAuth = async (
+  req: ExtendedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const token = req.cookies["accessToken"];
+    if (token) req.member = await authService.checkAuth(token);
+    if (!req.member) {
+      throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+    }
+    next();
+  } catch (err) {
+    console.log("Error, retrieveAuth:", err);
+    next();
+  }
+};
+{
+}
 export default memberController;
