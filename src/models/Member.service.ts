@@ -22,10 +22,10 @@ class MemberService {
 
   public async getRestaurant(): Promise<Member> {
     const result = await this.memberModel
-      .findOne({ MemberType: MemberType.RESTAURANT })
+      .findOne({ memberType: MemberType.RESTAURANT })
       .lean()
       .exec();
-    result.target = "Test";
+      result.target = "Test";
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
     return result;
   }
