@@ -82,12 +82,27 @@ class MemberService {
     return result;
   }
 
-  public async updateMember(member: Member, input: MemberUpdateInput): Promise <Member> {
-const memberId = shapeIntoMongooseObjectId(member._id);
-const result = await this.memberModel.findOneAndUpdate({_id: memberId}, input, {new: true}).exec();
-if(!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+  public async updateMember(
+    member: Member,
+    input: MemberUpdateInput,
+  ): Promise<Member> {
+    const memberId = shapeIntoMongooseObjectId(member._id);
+    const result = await this.memberModel
+      .findOneAndUpdate({ _id: memberId }, input, { new: true })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
-return result;
+    return result;
+  }
+
+  public async getTopUsers(): Promise<Member[]> {
+    const result = await this.memberModel
+      .find({ MemberStatus: MemberStatus.ACTIVE, memberPoints: { $gte: 1 } })
+      .sort({ memberPoints: -1 })
+      .limit(4)
+      .exec();
+      if(!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    return result;
   }
 
   /* SSR */
