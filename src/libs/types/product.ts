@@ -32,6 +32,14 @@ export interface ProductInput {
   productViews?: number;
 }
 
+export interface ProductInquiry {
+  order: string;
+  page: number;
+  limit: number;
+  productCollection?: ProductCollection;
+  search?: string;
+}
+
 // NEW: Product.service.ts imports this type for updateChosenProduct.
 // Without it TypeScript reports: has no exported member 'ProductUpdateInput'.
 export interface ProductUpdateInput {
