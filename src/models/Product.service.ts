@@ -10,6 +10,7 @@ import { shapeIntoMongooseObjectId } from "../libs/utils/config";
 import { Member } from "../libs/types/member";
 import { ProductStatus } from "../libs/enums/product.enum";
 import { T } from "../libs/types/common";
+import {ObjectId} from "mongoose";
 
 class ProductService {
   private readonly productModel;
@@ -41,6 +42,14 @@ match.productName =  {$regex: new RegExp(inquiry.search, "i")};
       .exec();
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
     return result;
+  }
+
+  public async getProduct (memberId: ObjectId | null, id: string): Promise<Product> {
+const productId = shapeIntoMongooseObjectId(id);
+let result = await this.productModel.findOne({_id: productId, productStatus: ProductStatus.PROCESS,}).exec();
+if(!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+return result;
+// TODO: if authenticated users => first => view log creation
   }
 
   /* SSR */
