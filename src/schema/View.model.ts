@@ -3,7 +3,7 @@ import { ViewGroup } from "../libs/enums/view.enum";
 
 const viewSchema = new Schema(
   {
-    ViewGroup: {
+    viewGroup: {
       type: String,
       enum: ViewGroup,
       required: true,
@@ -14,7 +14,7 @@ const viewSchema = new Schema(
       ref: "Member",
     },
 
-    viewrefId: {
+    viewRefId: {
       type: Schema.Types.ObjectId,
       required: true,
     },
