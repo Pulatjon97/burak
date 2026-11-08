@@ -5,20 +5,24 @@ import {
   OrderInquiry,
   OrderItem,
   OrderItemInput,
+  OrderUpdateInput,
 } from "../libs/types/order";
 import { shapeIntoMongooseObjectId } from "../libs/utils/config";
 import Errors, { HttpCode, Message } from "../libs/utils/Errors";
 import OrderModel from "../schema/Order.model";
 import OrderItemModel from "../schema/OrderItem.model";
 import { ObjectId } from "mongoose";
+import MemberService from "./Member.service";
 
 class OrderService {
   private readonly orderModel;
   private readonly orderItemModel;
+  private readonly memberService;
 
   constructor() {
     this.orderModel = OrderModel;
     this.orderItemModel = OrderItemModel;
+    this.memberService = new MemberService();
   }
 
   public async createOrder(
@@ -84,17 +88,47 @@ class OrderService {
           },
         },
         {
-            $lookup: {
-                from: "products",
-                localField: "orderItems.productId",
-                foreignField: "_id",
-                as: "productData"
-            }
-        }
+          $lookup: {
+            from: "products",
+            localField: "orderItems.productId",
+            foreignField: "_id",
+            as: "productData",
+          },
+        },
       ])
       .exec();
 
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    return result;
+  }
+
+  public async updateOrder(
+    member: Member,
+    input: OrderUpdateInput,
+  ): Promise<Order> {
+    const memberId = shapeIntoMongooseObjectId(member._id);
+    const orderId = shapeIntoMongooseObjectId(input.orderId);
+
+    const result = await this.orderModel
+      .findOneAndUpdate(
+        {
+          memberId: memberId,
+          _id: orderId,
+        },
+        {
+          orderStatus: input.orderStatus,
+        },
+        { new: true },
+      )
+      .exec();
+
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    // Award one point when the order moves to PROCESS.
+    if (input.orderStatus === OrderStatus.PROCESS) {
+      await this.memberService.addUserPoint(member, 1);
+    }
+
     return result;
   }
 }
